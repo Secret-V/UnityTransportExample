@@ -30,7 +30,7 @@ public class Commandline : MonoBehaviour
                 (new GameObject()).AddComponent<ServerBehaviour>();
                 break;
             case "connect":
-                GameObject.Find("GameObject").GetComponent<ClientBehaviour>().enabled = true;
+                (new GameObject()).AddComponent<ClientBehaviour>();
                 break;
             default:
                 output.text += $"\nUnrecognised command: {cmd}";

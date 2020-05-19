@@ -66,7 +66,7 @@
     <Compile Include="Assets\Code\Client\ClientBehaviour.cs" />
     <Compile Include="Assets\Code\Client\ClientUpdateJob.cs" />
     <Compile Include="Assets\Code\Commandline.cs" />
-    <Compile Include="Assets\Code\Message.cs" />
+    <Compile Include="Assets\Code\MessageHeader.cs" />
     <Compile Include="Assets\Code\Server\ServerBehaviour.cs" />
     <Compile Include="Assets\Code\Server\ServerUpdateConnectionsJob.cs" />
     <Compile Include="Assets\Code\Server\ServerUpdateJob.cs" />

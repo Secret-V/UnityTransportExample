@@ -31,7 +31,7 @@ public struct ServerUpdateConnectionsJob : IJob
             var message = new WelcomeMessage
             {
                 PlayerID = c.InternalId,
-                Colour = ((uint)colour.r << 24) | ((uint)colour.g << 16) | ((uint)colour.b << 8) | (uint)colour.a
+                Colour = ((uint)colour.r << 24) | ((uint)colour.g << 16) | ((uint)colour.b << 8) | colour.a
             };
 
             var writer = networkDriver.BeginSend(c);

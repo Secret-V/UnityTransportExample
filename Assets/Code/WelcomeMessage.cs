@@ -7,28 +7,19 @@ using Unity.Networking.Transport;
 
 namespace Assets.Code
 {
-    public class WelcomeMessage : Message
+    public struct WelcomeMessage : IMessage
     {
         public int PlayerID { get; set; }
         public uint Colour { get; set; }
 
-        public WelcomeMessage()
+        public void SerializeObject(ref DataStreamWriter writer)
         {
-            Type = MessageType.Welcome;
-        }
-
-        public override void SerializeObject(ref DataStreamWriter writer)
-        {
-            base.SerializeObject(ref writer);
-
             writer.WriteInt(PlayerID);
             writer.WriteUInt(Colour);
         }
 
-        public override void DeserializeObject(ref DataStreamReader reader)
+        public void DeserializeObject(ref DataStreamReader reader)
         {
-            base.DeserializeObject(ref reader);
-            
             PlayerID = reader.ReadInt();
             Colour = reader.ReadUInt();
         }

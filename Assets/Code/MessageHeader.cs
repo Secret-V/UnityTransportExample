@@ -7,10 +7,18 @@ using Unity.Networking.Transport;
 
 namespace Assets.Code
 {
-    public class Message
+    public interface IMessage
+    {
+        void SerializeObject(ref DataStreamWriter writer);
+        void DeserializeObject(ref DataStreamReader reader);
+    }
+
+    public struct MessageHeader : IMessage
     {
         private static uint nextID = 0;
         private static uint NextID => ++nextID;
+
+        public IMessage Message { get; set; }
 
         public enum MessageType
         {
@@ -20,21 +28,24 @@ namespace Assets.Code
             SetName,
             RequestDenied,
             PlayerLeft,
-            StartGame
+            StartGame,
+            Count
         }
 
-        public MessageType Type { get; protected set; }
-        public uint ID { get; private set; } = NextID;
+        public MessageType Type { get; private set; }
+        public uint ID { get; private set; }
 
-        public virtual void SerializeObject(ref DataStreamWriter writer)
+        public void SerializeObject(ref DataStreamWriter writer)
         {
             writer.WriteUShort((ushort)Type);
             writer.WriteUInt(ID);
+            Message.SerializeObject(ref writer);
         }
 
-        public virtual void DeserializeObject(ref DataStreamReader reader)
+        public void DeserializeObject(ref DataStreamReader reader)
         {
             ID = reader.ReadUInt();
+            Message.DeserializeObject(ref reader);
         }
     }
 }

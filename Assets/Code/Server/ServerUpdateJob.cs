@@ -10,6 +10,7 @@ public struct ServerUpdateJob : IJobParallelForDefer
 {
     public NetworkDriver.Concurrent networkDriver;
     public NativeArray<NetworkConnection> connections;
+    public NativeQueue<MessageHeader>.ParallelWriter messagesQueue;
 
     public void Execute(int index)
     {
@@ -21,25 +22,26 @@ public struct ServerUpdateJob : IJobParallelForDefer
         {
             if(cmd == NetworkEvent.Type.Data)
             {
-                var messageType = (Message.MessageType)reader.ReadUShort();
+                var messageType = (MessageHeader.MessageType)reader.ReadUShort();
                 switch (messageType)
                 {
-                    case Message.MessageType.None:
+                    case MessageHeader.MessageType.None:
                         break;
-                    case Message.MessageType.NewPlayer:
+                    case MessageHeader.MessageType.NewPlayer:
                         break;
-                    case Message.MessageType.Welcome:
+                    case MessageHeader.MessageType.Welcome:
                         break;
-                    case Message.MessageType.SetName:
-                        var message = new SetNameMessage();
-                        message.DeserializeObject(ref reader);
-                        Debug.Log($"Welcome, user: {message.Name}");
+                    case MessageHeader.MessageType.SetName:
+                        var header = new MessageHeader();
+                        header.Message = new SetNameMessage();
+                        header.DeserializeObject(ref reader);
+                        messagesQueue.Enqueue(header);
                         break;
-                    case Message.MessageType.RequestDenied:
+                    case MessageHeader.MessageType.RequestDenied:
                         break;
-                    case Message.MessageType.PlayerLeft:
+                    case MessageHeader.MessageType.PlayerLeft:
                         break;
-                    case Message.MessageType.StartGame:
+                    case MessageHeader.MessageType.StartGame:
                         break;
                     default:
                         break;

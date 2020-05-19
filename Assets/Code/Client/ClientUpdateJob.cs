@@ -29,15 +29,15 @@ public struct ClientUpdateJob : IJob
             }
             else if (cmd == NetworkEvent.Type.Data)
             {
-                var messageType = (Message.MessageType)reader.ReadUShort();
+                var messageType = (MessageHeader.MessageType)reader.ReadUShort();
                 switch (messageType)
                 {
-                    case Message.MessageType.NewPlayer:
+                    case MessageHeader.MessageType.NewPlayer:
                         break;
-                    case Message.MessageType.Welcome:
+                    case MessageHeader.MessageType.Welcome:
                         var welcomeMessage = new WelcomeMessage();
                         welcomeMessage.DeserializeObject(ref reader);
-                        Debug.Log($"Received message, ID: {welcomeMessage.ID}, PlayerID: {welcomeMessage.PlayerID}, Colour: {welcomeMessage.Colour}");
+                        //Debug.Log($"Received message, ID: {welcomeMessage.Header.ID}, PlayerID: {welcomeMessage.PlayerID}, Colour: {welcomeMessage.Colour}");
 
                         var setnameMessage = new SetNameMessage
                         {
@@ -47,15 +47,15 @@ public struct ClientUpdateJob : IJob
                         setnameMessage.SerializeObject(ref writer);
                         networkDriver.EndSend(writer);
                         break;
-                    case Message.MessageType.SetName:
+                    case MessageHeader.MessageType.SetName:
                         break;
-                    case Message.MessageType.RequestDenied:
+                    case MessageHeader.MessageType.RequestDenied:
                         break;
-                    case Message.MessageType.PlayerLeft:
+                    case MessageHeader.MessageType.PlayerLeft:
                         break;
-                    case Message.MessageType.StartGame:
+                    case MessageHeader.MessageType.StartGame:
                         break;
-                    case Message.MessageType.None:
+                    case MessageHeader.MessageType.None:
                     default:
                         break;
                 }
